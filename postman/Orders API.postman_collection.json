@@ -1,0 +1,154 @@
+{
+  "info": {
+    "name": "Orders API",
+    "_postman_id": "11111111-2222-3333-4444-555555555555",
+    "description": "CRUD requests for Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/orders",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerName\": \"Ada Lovelace\",\n  \"customerEmail\": \"ada@example.com\",\n  \"items\": [\n    {\n      \"sku\": \"SKU-001\",\n      \"name\": \"Keyboard\",\n      \"quantity\": 2,\n      \"unitPrice\": 39.9\n    },\n    {\n      \"sku\": \"SKU-002\",\n      \"name\": \"Mouse\",\n      \"quantity\": 1,\n      \"unitPrice\": 19.5\n    }\n  ]\n}"
+        },
+        "description": "Create a new order"
+      },
+      "response": [
+        {
+          "name": "201 Created",
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "cookie": [],
+          "body": "{\n  \"id\": \"c0ffee00-0000-0000-0000-c0ffee000000\",\n  \"customerName\": \"Ada Lovelace\",\n  \"customerEmail\": \"ada@example.com\",\n  \"status\": \"PENDING\",\n  \"totalAmount\": 99.3,\n  \"items\": [\n    {\n      \"sku\": \"SKU-001\",\n      \"name\": \"Keyboard\",\n      \"quantity\": 2,\n      \"unitPrice\": 39.9\n    },\n    {\n      \"sku\": \"SKU-002\",\n      \"name\": \"Mouse\",\n      \"quantity\": 1,\n      \"unitPrice\": 19.5\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Orders",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/orders",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ]
+        },
+        "description": "Get all orders"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/orders/{{orderId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "{{orderId}}"
+          ]
+        },
+        "description": "Get a specific order by UUID"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Order",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/orders/{{orderId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "{{orderId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"PAID\"\n}"
+        },
+        "description": "Update fields such as status or items"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Order",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/orders/{{orderId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "{{orderId}}"
+          ]
+        },
+        "description": "Delete order"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "orderId",
+      "value": "c0ffee00-0000-0000-0000-c0ffee000000"
+    }
+  ]
+}

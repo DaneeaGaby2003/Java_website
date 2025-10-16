@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ordersdb}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 60000
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate     # en prod lo ideal es 'validate' (usa migraciones)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false       # buena práctica en prod
+
+# Logging prudente en prod
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.hibernate.SQL: warn
+
+# (Opcional) CORS si habrá front en otro dominio
+# spring:
+#   web:
+#     cors:
+#       mappings:
+#         "[/api/**]":
+#           allowed-origins: "https://tu-front.com"
+#           allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+#           allowed-headers: "*"

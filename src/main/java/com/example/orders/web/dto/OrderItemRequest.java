@@ -7,8 +7,6 @@ import java.math.BigDecimal;
 public record OrderItemRequest(
         @NotBlank String sku,
         @NotBlank String name,
-        @Positive int quantity,
+        @Positive Integer quantity,
         @Positive BigDecimal unitPrice
 ) {}
-
-

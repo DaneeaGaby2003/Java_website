@@ -1,16 +1,18 @@
 spring:
+  application:
+    name: orders-api
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
   datasource:
-    url: jdbc:h2:mem:ordersdb
-    username: sa
-    password: password
+    url: jdbc:h2:mem:ordersdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-  h2:
-    console:
-      enabled: true
-
-server:
-  port: 8080
+      ddl-auto: create-drop
+logging:
+  level:
+    root: WARN

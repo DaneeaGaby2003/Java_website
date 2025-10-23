@@ -60,3 +60,21 @@ Add collaborators on GitHub (`Settings` → `Collaborators`) or create a private
 
 ## License
 ISC
+## Sprint 2 — Environment Configuration and Security
+
+This sprint adds multiple environment profiles and secure variable management
+for the Order Management System built with Spring Boot 3.0.
+
+### 📁 Profiles included
+- **application-dev.yml** — local development
+- **application-test.yml** — testing
+- **application-prod.yml** — production
+- **application.yml** — base configuration
+
+Each profile defines its own database, pagination, and security parameters.
+
+### ⚙️ Environment Variables
+All variables are listed in `.env.example`.
+Copy it to `.env` (never commit `.env`) and edit as needed:
+```bash
+cp .env.example .env

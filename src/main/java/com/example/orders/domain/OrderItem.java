@@ -1,54 +1,58 @@
 package com.example.orders.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-import java.util.UUID;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
-/**
- * OrderItem entity representing each line item in an order.
- */
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @NotBlank
-    @Size(max = 160)
+    @Column(length = 64, nullable = false)
     private String sku;
 
+    // ⬇️ CAMPO NUEVO
     @NotBlank
-    @Size(max = 200)
+    @Column(length = 160, nullable = false)
     private String name;
 
     @Positive
-    private int quantity;
+    private Integer quantity;
 
     @Positive
-    @Column(precision = 12, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    // --- getters / setters ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
+
+    public String getSku() { return sku; }
+    public void setSku(String sku) { this.sku = sku; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public BigDecimal getUnitPrice() { return unitPrice; }
+    public void setUnitPrice(BigDecimal unitPrice) { this.unitPrice = unitPrice; }
 
     public BigDecimal getLineTotal() {
         return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
-
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
-    public BigDecimal getUnitPrice() { return unitPrice; }
-    public void setUnitPrice(BigDecimal unitPrice) { this.unitPrice = unitPrice; }
-    public Order getOrder() { return order; }
-    public void setOrder(Order order) { this.order = order; }
 }

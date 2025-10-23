@@ -1,27 +1,26 @@
 <!-- pom.xml -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Ajusta estos 3 a tu gusto -->
     <groupId>com.example</groupId>
     <artifactId>orders-api</artifactId>
     <version>1.0.0</version>
     <name>orders-api</name>
     <description>Orders API - Spring Boot</description>
 
-    <!-- MUY IMPORTANTE: usar el parent de Spring Boot gestiona versiones de deps y plugins -->
+    <!-- Spring Boot gestiona versiones de starters y plugins -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.5</version>
-        <relativePath/> <!-- busca la versión estable más reciente si quieres -->
+        <relativePath/>
     </parent>
 
     <properties>
         <java.version>17</java.version>
+        <springdoc.version>2.6.0</springdoc.version>
     </properties>
 
     <dependencies>
@@ -37,51 +36,70 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Validaciones (@NotNull, @Email, etc.) -->
+        <!-- Bean Validation (JSR-380) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Base de datos en memoria para dev -->
+        <!-- Seguridad (opcional si tienes SecurityConfig) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Actuator (health/info) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- H2 (para desarrollo y pruebas locales) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Driver PostgreSQL (prod) -->
+        <!-- PostgreSQL (para producción, si aplica) -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- OpenAPI/Swagger UI -->
+        <!-- Swagger/OpenAPI (springdoc) -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.5.0</version>
+            <version>${springdoc.version}</version>
         </dependency>
 
-        <!-- Lombok (opcional) -->
+        <!-- Lombok (para reducir boilerplate) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- Tests -->
+        <!-- Tests (JUnit 5, MockMvc, AssertJ, etc.) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Soporte para @ConfigurationProperties -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Compila con Java 17 -->
+            <!-- Compilación con Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -90,7 +108,14 @@
                 </configuration>
             </plugin>
 
-            <!-- Empaquetado ejecutable y goal spring-boot:run -->
+            <!-- Ejecuta pruebas unitarias con JUnit 5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- Permite ejecutar y empaquetar la app -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -102,23 +127,9 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Opcional: surefire ya viene gestionado por el parent;
-                 si quieres activar/desactivar tests por config, puedes agregarlo -->
-            <!--
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-plugin</artifactId>
-              <version>3.2.5</version>
-            </plugin>
-            -->
         </plugins>
     </build>
 
-    <!-- Perfiles Maven (opcionales).
-         Normalmente NO necesitas perfiles en el POM;
-         Spring Boot usa application-dev.yml / application-prod.yml en resources.
-         Pero si quieres atajos para spring-boot:run, te dejo ejemplo. -->
     <profiles>
         <profile>
             <id>dev</id>

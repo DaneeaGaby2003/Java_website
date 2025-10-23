@@ -5,52 +5,54 @@ import com.example.orders.service.OrderService;
 import com.example.orders.web.dto.CreateOrderRequest;
 import com.example.orders.web.dto.UpdateOrderRequest;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderService service;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderService service) {
+        this.service = service;
     }
 
-    /** Create a new order */
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Order create(@Valid @RequestBody CreateOrderRequest request) {
-        return orderService.create(request);
-    }
-
-    /** Retrieve all orders */
+    /** GET /api/orders - Listar todas las órdenes */
     @GetMapping
     public List<Order> list() {
-        return orderService.list();
+        return service.list();
     }
 
-    /** Retrieve a single order by id */
+    /** POST /api/orders - Crear una orden */
+    @PostMapping
+    public ResponseEntity<Order> create(@RequestBody @Valid CreateOrderRequest req) {
+        var created = service.create(req);
+        return ResponseEntity
+                .created(URI.create("/api/orders/" + created.getId()))
+                .body(created);
+    }
+
+    /** GET /api/orders/{id} - Obtener una orden por ID */
     @GetMapping("/{id}")
-    public Order get(@PathVariable UUID id) {
-        return orderService.get(id);
+    public Order getById(@PathVariable UUID id) {
+        return service.getById(id);
     }
 
-    /** Update an order by id */
+    /** PUT /api/orders/{id} - Actualizar una orden */
     @PutMapping("/{id}")
-    public Order update(@PathVariable UUID id, @RequestBody UpdateOrderRequest request) {
-        return orderService.update(id, request);
+    public Order update(@PathVariable UUID id, @RequestBody @Valid UpdateOrderRequest req) {
+        return service.update(id, req);
     }
 
-    /** Delete an order by id */
+    /** DELETE /api/orders/{id} - Eliminar una orden */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
-        orderService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
-
